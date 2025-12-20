@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import type NoteDocument from '../types/NoteDocument'
 
 const url = process.env.MONGODB_URI
 
@@ -14,16 +15,13 @@ mongoose.connect(url, { family: 4 }).then(result => {
   })
 
 const noteSchema = new mongoose.Schema({
-  _id: Object,
-  id: String,
   content: String,
-  important: Boolean,
-  __v: Number
+  important: Boolean
 })
 
 noteSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
+  transform: (document: mongoose.Document, returnedObject: NoteDocument) => {
+    returnedObject.id = returnedObject._id!.toString()
     delete returnedObject._id
     delete returnedObject.__v
   }
